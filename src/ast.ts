@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import {BombonError} from "./error";
 
 type NodeClass = any;
 
@@ -28,7 +29,7 @@ export function build(entry: any) {
   const nodeClass = nodeTypes[entry.type];
 
   if (!nodeClass) {
-    throw new NodeTypeNotImplemented(entry.type);
+    throw new UnknownNodeType(entry.type);
   }
 
   const paramNames = Reflect.getMetadata(NODE_PARAMS_KEY, nodeClass);
@@ -59,16 +60,8 @@ export function build(entry: any) {
   return new nodeClass(...params);
 }
 
-export class BombonError extends Error {
-  constructor(message: string) {
-    super(`Bombon: ${message}`);
-    Object.setPrototypeOf(this, new.target.prototype);
-  }
-}
-
-export class NodeTypeNotImplemented extends BombonError {
+export class UnknownNodeType extends BombonError {
   constructor(public nodeType: string) {
     super(`Node type: \`${nodeType}\` not implemented`);
   }
 }
-

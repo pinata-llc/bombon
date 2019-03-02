@@ -15,5 +15,3 @@ export class Literal<E> extends Node<E> {
     return this.value;
   }
 }
-
-

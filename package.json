@@ -1,0 +1,30 @@
+{
+ "name": "bombon",
+ "version": "1.0.0",
+ "description": "Run JS subsets in JS, safely",
+ "main": "dist/index.js",
+ "scripts": {
+  "build": "tsc",
+  "test": "npm run build && ava"
+ },
+ "author": "Agustin Zubiaga <agustin@gopinata.com>",
+ "license": "MIT",
+ "devDependencies": {
+  "@types/acorn": "^4.0.5",
+  "acorn": "^6.1.1",
+  "ava": "^1.2.1",
+  "reflect-metadata": "^0.1.13",
+  "ts-node": "^8.0.2",
+  "tslint": "^5.13.1",
+  "typescript": "^3.3.3333"
+ },
+ "ava": {
+  "compileEnhancements": false,
+  "extensions": [
+   "ts"
+  ],
+  "require": [
+   "ts-node/register"
+  ]
+ }
+}

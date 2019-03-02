@@ -5,13 +5,18 @@ import { build } from "./ast";
 import "./expression/logicalExpression";
 import "./expression/binaryExpression";
 import "./expression/literal";
+import "./expression/identifier";
+import "./expression/memberExpression";
+import "./expression/callExpression";
 import "./statement/expressionStatement";
 import "./statement/blockStatement";
 import "./statement/ifStatement";
 import "./program";
+import {Context} from "./context";
 
 test("build", (t) => {
-  const program = Parser.parse(`
+  const programAst = Parser.parse(`
+    true;
     true && false;
     true || true;
     
@@ -26,9 +31,38 @@ test("build", (t) => {
     if (2 > 1) {
       '2 is greater than 1';
     }
+    
+    step.details.key;
+    step.details['ke' + 'y'];
+    friends[0];
+    friends[0 + 1];
+    
+    log("I can call functions now!"); 
+    console.log("Hello", "World!");
   `);
 
-  console.log(build(program).eval());
+  const ctx = new Context();
+
+  ctx.set("step", {
+    "details": {
+      "key": "setup"
+    }
+  });
+
+  ctx.set("log", (message: string) => {
+    console.log(message);
+  });
+
+  ctx.set("console", {
+    log: (message1: string, message2: string) => {
+      console.log(message1, message2)
+    }
+  });
+
+  ctx.set("friends", ['Tom', 'Pedro']);
+
+  const program = build(programAst, ctx).eval();
+  console.log(program);
 
   t.pass();
 });

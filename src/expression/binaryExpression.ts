@@ -52,7 +52,6 @@ export class BinaryExpression extends Expression<BinaryOpValue> {
         return left / right;
       case "%":
         return left % right;
-
       default:
         throw new UnknownBinaryOperator(this.operator);
     }

@@ -1,14 +1,13 @@
 export class Context {
   values: { [key: string]: any } = {};
 
-  constructor(protected parent?: Context) {
-  }
+  constructor(protected parent?: Context) {}
 
   hasOwn(name: string) {
     return name in this.values;
   }
 
-  findContextWith(name: string) {
+  private findContextWith(name: string) {
     let ctx: Context | undefined = this;
 
     while (ctx && !ctx.hasOwn(name)) ctx = ctx.parent;

@@ -35,10 +35,6 @@ export function build(entry: any, ctx: Context) {
 
   const paramNames = Reflect.getMetadata(NODE_PARAMS_KEY, nodeClass);
 
-  if (!paramNames) {
-    throw new Error("Node without params");
-  }
-
   const params = [];
 
   for (const paramName of paramNames) {

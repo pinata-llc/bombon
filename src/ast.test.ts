@@ -1,6 +1,6 @@
 import test from "ava";
 import { Parser } from "acorn";
-import { build } from "./ast";
+import {build, UnknownNodeType} from "./ast";
 
 import "./expression/logicalExpression";
 import "./expression/binaryExpression";
@@ -75,4 +75,14 @@ test("build", (t) => {
   console.log(program);
 
   t.pass();
+});
+
+test("throws on unknown node type", (t) => {
+  t.throws(() => {
+    const ctx = new Context();
+
+    build({
+      type: "BullS#1tStatement"
+    }, ctx);
+  }, UnknownNodeType);
 });

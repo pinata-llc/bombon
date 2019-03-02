@@ -1,6 +1,6 @@
 import test, {Macro} from 'ava';
 
-import {BinaryExpression, BinaryOperator, BinaryOpValue} from "./binaryExpression";
+import {BinaryExpression, BinaryOperator, BinaryOpValue, UnknownBinaryOperator} from "./binaryExpression";
 import {Literal} from "./literal";
 
 const macro: Macro<[BinaryOpValue, BinaryOperator, BinaryOpValue, BinaryOpValue]> = (t, a, o, b, e) => {
@@ -86,3 +86,10 @@ test(macro, 30, "/", 12, 2.5);
 
 // Modulo
 test(macro, 7, "%", 2, 1);
+
+// Unknown operator
+test("throws error when passing an unknown operator", (t) => {
+  t.throws(() => {
+    new BinaryExpression(new Literal(1), ">>%" as any, new Literal(2)).eval();
+  }, UnknownBinaryOperator);
+});

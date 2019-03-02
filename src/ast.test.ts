@@ -4,6 +4,7 @@ import { build } from "./ast";
 
 import "./expression/logicalExpression";
 import "./expression/binaryExpression";
+import "./expression/unaryExpression";
 import "./expression/literal";
 import "./expression/identifier";
 import "./expression/memberExpression";
@@ -12,6 +13,7 @@ import "./statement/expressionStatement";
 import "./statement/blockStatement";
 import "./statement/ifStatement";
 import "./program";
+
 import {Context} from "./context";
 
 test("build", (t) => {
@@ -39,6 +41,12 @@ test("build", (t) => {
     
     log("I can call functions now!"); 
     console.log("Hello", "World!");
+    
+    if (!raining) {
+      log("Enjoy your rain-free day!"); 
+    } 
+    
+    log("It's " + (-20) + " degrees outside");
   `);
 
   const ctx = new Context();
@@ -59,7 +67,9 @@ test("build", (t) => {
     }
   });
 
-  ctx.set("friends", ['Tom', 'Pedro']);
+  ctx.set("friends", ["Tom", "Pedro"]);
+
+  ctx.set("raining", false);
 
   const program = build(programAst, ctx).eval();
   console.log(program);

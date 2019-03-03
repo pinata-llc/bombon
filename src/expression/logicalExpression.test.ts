@@ -1,8 +1,8 @@
-import test, {Macro} from 'ava';
+import test, { Macro } from "ava";
 
-import {Scope} from "../scope";
-import {LogicalExpression, LogicalOperator} from "./logicalExpression";
-import {Literal} from "./literal";
+import { Scope } from "../scope";
+import { Literal } from "./literal";
+import { LogicalExpression, LogicalOperator } from "./logicalExpression";
 
 const scope = new Scope();
 
@@ -11,15 +11,14 @@ const macro: Macro<[boolean, LogicalOperator, boolean, boolean]> = (t, p, o, q, 
   t.is(expression.eval(scope), pq);
 };
 
-macro.title = (providedTitle = "", p, o, q, pq) =>
-  `${providedTitle} ${p} ${o} ${q} == ${pq}`;
+macro.title = (providedTitle = "", p, o, q, pq) => `${providedTitle} ${p} ${o} ${q} == ${pq}`;
 
-test(macro, true , "&&", true , true);
-test(macro, true , "&&", false, false);
-test(macro, false, "&&", true , false);
+test(macro, true, "&&", true, true);
+test(macro, true, "&&", false, false);
+test(macro, false, "&&", true, false);
 test(macro, false, "&&", false, false);
 
-test(macro, true , "||", true , true);
-test(macro, true , "||", false, true);
-test(macro, false, "||", true , true);
+test(macro, true, "||", true, true);
+test(macro, true, "||", false, true);
+test(macro, false, "||", true, true);
 test(macro, false, "||", false, false);

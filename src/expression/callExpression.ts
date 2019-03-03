@@ -1,25 +1,23 @@
-import {Expression} from "./expression";
-import {ASTNode, ASTParam} from "../ast";
-import {Scope} from "../scope";
+import { ASTNode, ASTParam } from "../ast";
+import { Scope } from "../scope";
+import { Expression } from "./expression";
 
 @ASTNode
 export class CallExpression extends Expression<any> {
-
-  constructor (
+  constructor(
     @ASTParam("callee")
-    protected callee: Expression<Function>,
-
+    protected callee: Expression<(...p: any) => any>,
     @ASTParam("arguments")
-    protected _arguments: Array<Expression<any>>
+    protected args: Array<Expression<any>>,
   ) {
     super();
   }
 
-  eval(scope: Scope): any {
+  public eval(scope: Scope): any {
     const fn = this.callee.eval(scope);
     const args = [];
 
-    for (const arg of this._arguments) {
+    for (const arg of this.args) {
       args.push(arg.eval(scope));
     }
 

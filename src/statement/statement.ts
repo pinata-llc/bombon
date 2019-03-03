@@ -1,3 +1,3 @@
-import {Node} from "../node";
+import { Node } from "../node";
 
 export abstract class Statement extends Node<void> {}

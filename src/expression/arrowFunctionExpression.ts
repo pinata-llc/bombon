@@ -1,26 +1,25 @@
-import {ASTNode, ASTParam} from "../ast";
-import {Expression} from "./expression";
-import {BlockStatement} from "../statement/blockStatement";
-import {Scope} from "../scope";
-import {Identifier} from "./identifier";
+import { ASTNode, ASTParam } from "../ast";
+import { Scope } from "../scope";
+import { BlockStatement } from "../statement/blockStatement";
+import { Expression } from "./expression";
+import { Identifier } from "./identifier";
 
 @ASTNode
-export class ArrowFunctionExpression extends Expression<Function> {
-
-  constructor (
+export class ArrowFunctionExpression extends Expression<(...p: any) => any> {
+  constructor(
     @ASTParam("params")
-    protected params: Array<Identifier>,
-
+    protected params: Identifier[],
     @ASTParam("body")
-    protected body: BlockStatement | Expression<any>
+    protected body: BlockStatement | Expression<any>,
   ) {
     super();
   }
 
-  eval(scope: Scope): any {
+  public eval(scope: Scope): any {
     const { params, body } = this;
 
-    return function () {
+    // tslint:disable-next-line:only-arrow-functions
+    return function() {
       const fnScope = scope.child("function");
 
       for (let i = 0, l = params.length; i < l; i++) {

@@ -2,15 +2,20 @@
   "name": "bombon",
   "version": "1.0.0",
   "description": "Run JS subsets in JS, safely",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
+  "files": ["lib/**/*"],
   "scripts": {
     "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
     "update-snapshots": "ava --update-snapshots",
     "test": "npm run build && ava",
-    "coverage": "npm run build && nyc ava"
+    "coverage": "npm run build && nyc ava",
+    "pre-commit": "npm run format && npm run lint -- --fix"
   },
   "author": "Agustin Zubiaga <agustin@gopinata.com>",
   "license": "MIT",
+  "keywords": ["javascript", "DSL", "language"],
   "dependencies": {
     "reflect-metadata": "^0.1.13"
   },
@@ -20,9 +25,11 @@
     "acorn": "^6.1.1",
     "ava": "^1.2.1",
     "nyc": "^13.3.0",
+    "prettier": "^1.16.4",
     "sinon": "^7.2.6",
     "ts-node": "^8.0.2",
     "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333"
   },
   "ava": {

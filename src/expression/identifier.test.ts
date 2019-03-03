@@ -1,9 +1,9 @@
-import test from 'ava';
+import test from "ava";
 
-import {Identifier} from "./identifier";
-import {Scope} from "../scope";
+import { Scope } from "../scope";
+import { Identifier } from "./identifier";
 
-test("eval reads identifier from context", (t) => {
+test("eval reads identifier from context", t => {
   const scope = new Scope();
   scope.set("age", 18);
 

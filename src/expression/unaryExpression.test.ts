@@ -1,8 +1,9 @@
-import test, {Macro} from 'ava';
+import test, { Macro } from "ava";
 
-import {Scope} from "../scope";
-import {Literal} from "./literal";
-import {UnaryExpression, UnaryOperator, UnknownUnaryOperator} from "./unaryExpression";
+import { UnknownUnaryOperator } from "../error/unknownUnaryOperator";
+import { Scope } from "../scope";
+import { Literal } from "./literal";
+import { UnaryExpression, UnaryOperator } from "./unaryExpression";
 
 const scope = new Scope();
 
@@ -11,8 +12,7 @@ const macro: Macro<[UnaryOperator, any, any]> = (t, o, a, e) => {
   t.is(expression.eval(scope), e);
 };
 
-macro.title = (providedTitle = "", o, a, e) =>
-  `${providedTitle} ${o}${a} == ${e}`;
+macro.title = (providedTitle = "", o, a, e) => `${providedTitle} ${o}${a} == ${e}`;
 
 // NOT (!)
 test(macro, "!", true, false);
@@ -29,9 +29,8 @@ test(macro, "+", 10, 10);
 test(macro, "+", -10, -10);
 
 // Unknown operator
-test("throws error when passing an unknown operator", (t) => {
+test("throws error when passing an unknown operator", t => {
   t.throws(() => {
     new UnaryExpression(">>%" as any, new Literal(2)).eval(scope);
   }, UnknownUnaryOperator);
 });
-

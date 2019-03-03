@@ -1,24 +1,25 @@
-import test from "ava";
 import { Parser } from "acorn";
-import {build, UnknownNodeType} from "./ast";
+import test from "ava";
 
-import "./expression/logicalExpression";
-import "./expression/binaryExpression";
-import "./expression/unaryExpression";
-import "./expression/literal";
-import "./expression/identifier";
-import "./expression/memberExpression";
-import "./expression/callExpression";
+import { build } from "./ast";
+import { UnknownNodeType } from "./error/unknownNodeType";
+import { Scope } from "./scope";
+
 import "./expression/arrowFunctionExpression";
-import "./statement/expressionStatement";
+import "./expression/binaryExpression";
+import "./expression/callExpression";
+import "./expression/identifier";
+import "./expression/literal";
+import "./expression/logicalExpression";
+import "./expression/memberExpression";
+import "./expression/unaryExpression";
+import "./program";
 import "./statement/blockStatement";
+import "./statement/expressionStatement";
 import "./statement/ifStatement";
 import "./statement/returnStatement";
-import "./program";
 
-import {Scope} from "./scope";
-
-test("build", (t) => {
+test("build", t => {
   const programAst = Parser.parse(`
     true;
     true && false;
@@ -64,12 +65,12 @@ test("build", (t) => {
   const scope = new Scope();
 
   scope.set("step", {
-    "details": {
-      "key": "setup"
-    }
+    details: {
+      key: "setup",
+    },
   });
 
-  const log: Array<string> = [];
+  const log: string[] = [];
 
   scope.set("log", (message: string) => {
     log.push(message);
@@ -80,13 +81,13 @@ test("build", (t) => {
 
   build(programAst).eval(scope);
 
-  t.snapshot(log.join('\n'));
+  t.snapshot(log.join("\n"));
 });
 
-test("throws on unknown node type", (t) => {
+test("throws on unknown node type", t => {
   t.throws(() => {
     build({
-      type: "BullS#1tStatement"
+      type: "BullS#1tStatement",
     });
   }, UnknownNodeType);
 });

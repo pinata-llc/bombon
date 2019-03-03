@@ -1,19 +1,18 @@
-import {ASTNode, ASTParam} from "../ast";
-import {Statement} from "./statement";
-import {Expression} from "../expression/expression";
-import {Scope} from "../scope";
+import { ASTNode, ASTParam } from "../ast";
+import { Expression } from "../expression/expression";
+import { Scope } from "../scope";
+import { Statement } from "./statement";
 
 @ASTNode
 export class ExpressionStatement extends Statement {
-
   constructor(
     @ASTParam("expression")
-    protected expression: Expression<any>
+    protected expression: Expression<any>,
   ) {
     super();
   }
 
-  eval(scope: Scope) {
+  public eval(scope: Scope) {
     this.expression.eval(scope);
   }
 }

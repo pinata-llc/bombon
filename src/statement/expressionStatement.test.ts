@@ -1,17 +1,17 @@
-import test from 'ava';
-import sinon from 'sinon';
+import test from "ava";
+import sinon from "sinon";
 
-import {Scope} from "../scope";
-import {ExpressionStatement} from "./expressionStatement";
-import {Expression} from "../expression/expression";
+import { Expression } from "../expression/expression";
+import { Scope } from "../scope";
+import { ExpressionStatement } from "./expressionStatement";
 
 const scope = new Scope();
 
-test("evaluates the expression", (t) => {
+test("evaluates the expression", t => {
   const fn = sinon.fake();
 
   class MyExpression extends Expression<void> {
-    eval(scope: Scope) {
+    public eval() {
       fn();
     }
   }

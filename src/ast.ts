@@ -1,10 +1,10 @@
 import "reflect-metadata";
-import {BombonError} from "./error";
+import { UnknownNodeType } from "./error/unknownNodeType";
 
 type NodeClass = any;
 
 const nodeTypes: {
-  [type: string]: NodeClass
+  [type: string]: NodeClass;
 } = {};
 
 export function ASTNode(target: NodeClass) {
@@ -17,14 +17,16 @@ export function ASTParam(param: string) {
   return (target: any, prop: string, ordinal: number) => {
     const params = Reflect.getMetadata(NODE_PARAMS_KEY, target) || [];
     params[ordinal] = param;
-    Reflect.defineMetadata(NODE_PARAMS_KEY, params, target)
+    Reflect.defineMetadata(NODE_PARAMS_KEY, params, target);
   };
 }
 
 export function build(entry: any) {
   // TODO: Avoid recursion?
 
-  if (entry === null) return entry;
+  if (entry === null) {
+    return entry;
+  }
 
   const nodeClass = nodeTypes[entry.type];
 
@@ -54,10 +56,4 @@ export function build(entry: any) {
   }
 
   return new nodeClass(...params);
-}
-
-export class UnknownNodeType extends BombonError {
-  constructor(public nodeType: string) {
-    super(`Node type: \`${nodeType}\` not implemented`);
-  }
 }

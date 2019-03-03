@@ -1,8 +1,9 @@
-import test, {Macro} from 'ava';
+import test, { Macro } from "ava";
 
-import {Scope} from "../scope";
-import {BinaryExpression, BinaryOperator, BinaryOpValue, UnknownBinaryOperator} from "./binaryExpression";
-import {Literal} from "./literal";
+import { UnknownBinaryOperator } from "../error/unknownBinaryOperator";
+import { Scope } from "../scope";
+import { BinaryExpression, BinaryOperator, BinaryOpValue } from "./binaryExpression";
+import { Literal } from "./literal";
 
 const scope = new Scope();
 
@@ -91,7 +92,7 @@ test(macro, 30, "/", 12, 2.5);
 test(macro, 7, "%", 2, 1);
 
 // Unknown operator
-test("throws error when passing an unknown operator", (t) => {
+test("throws error when passing an unknown operator", t => {
   t.throws(() => {
     new BinaryExpression(new Literal(1), ">>%" as any, new Literal(2)).eval(scope);
   }, UnknownBinaryOperator);

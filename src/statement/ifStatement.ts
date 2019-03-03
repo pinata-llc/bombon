@@ -1,6 +1,7 @@
 import {ASTNode, ASTParam} from "../ast";
 import {Statement} from "./statement";
 import {LogicalExpression} from "../expression/logicalExpression";
+import {Scope} from "../scope";
 
 @ASTNode
 export class IfStatement extends Statement {
@@ -17,11 +18,11 @@ export class IfStatement extends Statement {
     super();
   }
 
-  eval() {
-    if (this.test.eval()) {
-      return this.consequent.eval();
+  eval(scope: Scope) {
+    if (this.test.eval(scope)) {
+      return this.consequent.eval(scope.child());
     } else if (this.alternate) {
-      return this.alternate.eval();
+      return this.alternate.eval(scope.child());
     }
   }
 }

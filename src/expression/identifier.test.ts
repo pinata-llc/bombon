@@ -1,11 +1,11 @@
 import test from 'ava';
 
 import {Identifier} from "./identifier";
-import {Context} from "../context";
+import {Scope} from "../scope";
 
 test("eval reads identifier from context", (t) => {
-  const ctx = new Context();
-  ctx.set("age", 18);
+  const scope = new Scope();
+  scope.set("age", 18);
 
-  t.is(new Identifier("age", ctx).eval(), 18);
+  t.is(new Identifier("age").eval(scope), 18);
 });

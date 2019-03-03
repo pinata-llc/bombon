@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import {BombonError} from "./error";
-import {Context} from "./context";
 
 type NodeClass = any;
 
@@ -22,7 +21,7 @@ export function ASTParam(param: string) {
   };
 }
 
-export function build(entry: any, ctx: Context) {
+export function build(entry: any) {
   // TODO: Avoid recursion?
 
   if (entry === null) return entry;
@@ -45,16 +44,16 @@ export function build(entry: any, ctx: Context) {
       param = [];
 
       for (const statement of statements) {
-        param.push(build(statement, ctx));
+        param.push(build(statement));
       }
     } else if (typeof param === "object") {
-      param = build(param, ctx);
+      param = build(param);
     }
 
     params.push(param);
   }
 
-  return new nodeClass(...params, ctx);
+  return new nodeClass(...params);
 }
 
 export class UnknownNodeType extends BombonError {

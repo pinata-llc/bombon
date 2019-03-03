@@ -1,3 +1,5 @@
+import { Scope } from "./scope";
+
 export abstract class Node<E = void> {
-  abstract eval(): E;
+  abstract eval(scope: Scope): E;
 }

@@ -1,11 +1,14 @@
 import test, {Macro} from 'ava';
 
+import {Scope} from "../scope";
 import {BinaryExpression, BinaryOperator, BinaryOpValue, UnknownBinaryOperator} from "./binaryExpression";
 import {Literal} from "./literal";
 
+const scope = new Scope();
+
 const macro: Macro<[BinaryOpValue, BinaryOperator, BinaryOpValue, BinaryOpValue]> = (t, a, o, b, e) => {
   const expression = new BinaryExpression(new Literal(a), o, new Literal(b));
-  t.is(expression.eval(), e);
+  t.is(expression.eval(scope), e);
 };
 
 const formatLiteral = (val: BinaryOpValue) => {
@@ -90,6 +93,6 @@ test(macro, 7, "%", 2, 1);
 // Unknown operator
 test("throws error when passing an unknown operator", (t) => {
   t.throws(() => {
-    new BinaryExpression(new Literal(1), ">>%" as any, new Literal(2)).eval();
+    new BinaryExpression(new Literal(1), ">>%" as any, new Literal(2)).eval(scope);
   }, UnknownBinaryOperator);
 });

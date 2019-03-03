@@ -1,8 +1,8 @@
 import test from "ava";
 
-import { Context } from "./context";
+import { Scope } from "./scope";
 
-const parent = new Context();
+const parent = new Scope();
 parent.set("session", 123);
 
 const child = parent.child();

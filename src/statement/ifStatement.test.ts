@@ -1,10 +1,13 @@
 import test from 'ava';
 
+import {Scope} from "../scope";
+import {Literal} from "../expression/literal";
+import {LogicalExpression} from "../expression/logicalExpression";
 import {IfStatement} from "./ifStatement";
 import {BlockStatement} from "./blockStatement";
-import {Literal} from "../expression/literal";
 import {ExpressionStatement} from "./expressionStatement";
-import {LogicalExpression} from "../expression/logicalExpression";
+
+const scope = new Scope();
 
 const trueTest = new LogicalExpression(new Literal(true), "||", new Literal(false));
 const falseTest = new LogicalExpression(new Literal(true), "&&", new Literal(false));
@@ -19,12 +22,12 @@ const alternate = new BlockStatement([
 
 test("true test", (t) => {
   const ifS = new IfStatement(trueTest, consequent);
-  t.deepEqual(ifS.eval(), ["true!"]);
+  t.deepEqual(ifS.eval(scope), ["true!"]);
 });
 
 test("false test", (t) => {
   const ifS = new IfStatement(falseTest, consequent);
-  t.falsy(ifS.eval());
+  t.falsy(ifS.eval(scope));
 });
 
 test("true test with alternate", (t) => {
@@ -34,7 +37,7 @@ test("true test with alternate", (t) => {
     alternate
   );
 
-  t.deepEqual(ifS.eval(), ["true!"]);
+  t.deepEqual(ifS.eval(scope), ["true!"]);
 });
 
 test("false test with alternate", (t) => {
@@ -44,5 +47,5 @@ test("false test with alternate", (t) => {
     alternate
   );
 
-  t.deepEqual(ifS.eval(), ["false!"]);
+  t.deepEqual(ifS.eval(scope), ["false!"]);
 });

@@ -1,6 +1,7 @@
 import {Expression} from "./expression";
 import {ASTNode, ASTParam} from "../ast";
 import {Identifier} from "./identifier";
+import {Scope} from "../scope";
 
 @ASTNode
 export class MemberExpression extends Expression<any> {
@@ -15,9 +16,9 @@ export class MemberExpression extends Expression<any> {
     super();
   }
 
-  eval(): any {
-    const obj: any = this.object.eval();
-    const name = this.property instanceof Identifier ? this.property.name : this.property.eval();
+  eval(scope: Scope): any {
+    const obj: any = this.object.eval(scope);
+    const name = this.property instanceof Identifier ? this.property.name : this.property.eval(scope);
     return obj[name];
   }
 }

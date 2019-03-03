@@ -14,7 +14,7 @@ import "./statement/blockStatement";
 import "./statement/ifStatement";
 import "./program";
 
-import {Context} from "./context";
+import {Scope} from "./scope";
 
 test("build", (t) => {
   const programAst = Parser.parse(`
@@ -49,29 +49,29 @@ test("build", (t) => {
     log("It's " + (-20) + " degrees outside");
   `);
 
-  const ctx = new Context();
+  const scope = new Scope();
 
-  ctx.set("step", {
+  scope.set("step", {
     "details": {
       "key": "setup"
     }
   });
 
-  ctx.set("log", (message: string) => {
+  scope.set("log", (message: string) => {
     console.log(message);
   });
 
-  ctx.set("console", {
+  scope.set("console", {
     log: (message1: string, message2: string) => {
       console.log(message1, message2)
     }
   });
 
-  ctx.set("friends", ["Tom", "Pedro"]);
+  scope.set("friends", ["Tom", "Pedro"]);
 
-  ctx.set("raining", false);
+  scope.set("raining", false);
 
-  const program = build(programAst, ctx).eval();
+  const program = build(programAst).eval(scope);
   console.log(program);
 
   t.pass();
@@ -79,10 +79,8 @@ test("build", (t) => {
 
 test("throws on unknown node type", (t) => {
   t.throws(() => {
-    const ctx = new Context();
-
     build({
       type: "BullS#1tStatement"
-    }, ctx);
+    });
   }, UnknownNodeType);
 });

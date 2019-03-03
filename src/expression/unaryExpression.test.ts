@@ -1,11 +1,14 @@
 import test, {Macro} from 'ava';
 
+import {Scope} from "../scope";
 import {Literal} from "./literal";
 import {UnaryExpression, UnaryOperator, UnknownUnaryOperator} from "./unaryExpression";
 
+const scope = new Scope();
+
 const macro: Macro<[UnaryOperator, any, any]> = (t, o, a, e) => {
   const expression = new UnaryExpression(o, new Literal(a));
-  t.is(expression.eval(), e);
+  t.is(expression.eval(scope), e);
 };
 
 macro.title = (providedTitle = "", o, a, e) =>
@@ -28,7 +31,7 @@ test(macro, "+", -10, -10);
 // Unknown operator
 test("throws error when passing an unknown operator", (t) => {
   t.throws(() => {
-    new UnaryExpression(">>%" as any, new Literal(2)).eval();
+    new UnaryExpression(">>%" as any, new Literal(2)).eval(scope);
   }, UnknownUnaryOperator);
 });
 

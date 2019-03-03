@@ -1,6 +1,7 @@
 import {Expression} from "./expression";
 import {ASTNode, ASTParam} from "../ast";
 import {BombonError} from "../error";
+import {Scope} from "../scope";
 
 export type BinaryOperator = "==" | "!=" | "===" | "!==" | "<" | "<=" | ">" | ">=" | "+" | "-" | "*" | "/" | "%";
 export type BinaryOpValue = any;
@@ -21,9 +22,9 @@ export class BinaryExpression extends Expression<BinaryOpValue> {
     super();
   }
 
-  eval() {
-    const left = this.left.eval();
-    const right = this.right.eval();
+  eval(scope: Scope) {
+    const left = this.left.eval(scope);
+    const right = this.right.eval(scope);
 
     switch (this.operator) {
       case "==":

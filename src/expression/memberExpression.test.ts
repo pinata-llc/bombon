@@ -3,10 +3,10 @@ import test from "ava";
 import { MemberExpression } from "./memberExpression";
 import {Identifier} from "./identifier";
 import {Literal} from "./literal";
-import {Context} from "../context";
+import {Scope} from "../scope";
 
-const ctx = new Context();
-ctx.set("a", {
+const scope = new Scope();
+scope.set("a", {
   aa: 1,
   b: {
     bb: 2
@@ -14,19 +14,19 @@ ctx.set("a", {
 });
 
 test("a['aa']", (t) => {
-  const expr = new MemberExpression(new Identifier("a", ctx), new Literal("aa"));
-  t.is(expr.eval(), 1);
+  const expr = new MemberExpression(new Identifier("a"), new Literal("aa"));
+  t.is(expr.eval(scope), 1);
 });
 
 test("a.aa", (t) => {
-  const expr = new MemberExpression(new Identifier("a", ctx), new Identifier("aa", ctx));
-  t.is(expr.eval(), 1);
+  const expr = new MemberExpression(new Identifier("a"), new Identifier("aa"));
+  t.is(expr.eval(scope), 1);
 });
 
 test("a.b.bb", (t) => {
   const expr = new MemberExpression(
-    new MemberExpression(new Identifier("a", ctx), new Identifier("b", ctx)),
-    new Identifier("bb", ctx)
+    new MemberExpression(new Identifier("a"), new Identifier("b")),
+    new Identifier("bb")
   );
-  t.is(expr.eval(), 2);
+  t.is(expr.eval(scope), 2);
 });

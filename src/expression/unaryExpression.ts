@@ -1,6 +1,7 @@
 import {ASTNode, ASTParam} from "../ast";
 import {Expression} from "./expression";
 import {BombonError} from "../error";
+import {Scope} from "../scope";
 
 export type UnaryOperator = "!" | "-" | "+";
 
@@ -16,14 +17,14 @@ export class UnaryExpression extends Expression<any> {
     super();
   }
 
-  eval() {
+  eval(scope: Scope) {
     switch (this.operator) {
       case "!":
-        return !this.argument.eval();
+        return !this.argument.eval(scope);
       case "-":
-        return -this.argument.eval();
+        return -this.argument.eval(scope);
       case "+":
-        return +this.argument.eval();
+        return +this.argument.eval(scope);
       default:
         throw new UnknownUnaryOperator(this.operator);
     }

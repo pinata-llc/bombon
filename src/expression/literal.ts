@@ -1,5 +1,6 @@
 import {ASTNode, ASTParam} from "../ast";
 import {Expression} from "./expression";
+import {Scope} from "../scope";
 
 @ASTNode
 export class Literal<E> extends Expression<E> {
@@ -11,7 +12,7 @@ export class Literal<E> extends Expression<E> {
     super();
   }
 
-  eval() {
+  eval(scope: Scope) {
     return this.value;
   }
 }

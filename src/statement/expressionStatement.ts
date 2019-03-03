@@ -1,6 +1,7 @@
 import {ASTNode, ASTParam} from "../ast";
 import {Statement} from "./statement";
 import {Expression} from "../expression/expression";
+import {Scope} from "../scope";
 
 @ASTNode
 export class ExpressionStatement extends Statement {
@@ -12,7 +13,7 @@ export class ExpressionStatement extends Statement {
     super();
   }
 
-  eval() {
-    return this.expression.eval();
+  eval(scope: Scope) {
+    return this.expression.eval(scope);
   }
 }

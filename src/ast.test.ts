@@ -9,9 +9,11 @@ import "./expression/literal";
 import "./expression/identifier";
 import "./expression/memberExpression";
 import "./expression/callExpression";
+import "./expression/arrowFunctionExpression";
 import "./statement/expressionStatement";
 import "./statement/blockStatement";
 import "./statement/ifStatement";
+import "./statement/returnStatement";
 import "./program";
 
 import {Scope} from "./scope";
@@ -40,13 +42,23 @@ test("build", (t) => {
     friends[0 + 1];
     
     log("I can call functions now!"); 
-    console.log("Hello", "World!");
     
     if (!raining) {
       log("Enjoy your rain-free day!"); 
     } 
     
     log("It's " + (-20) + " degrees outside");
+    
+    log(friends.map(f => f + " is my friend")); 
+    
+    // Early return 
+    log(friends.find((f) => {
+      if (f === "Tom") {
+        return true;
+      }
+      
+      return null;
+    }));
   `);
 
   const scope = new Scope();
@@ -57,24 +69,18 @@ test("build", (t) => {
     }
   });
 
-  scope.set("log", (message: string) => {
-    console.log(message);
-  });
+  const log: Array<string> = [];
 
-  scope.set("console", {
-    log: (message1: string, message2: string) => {
-      console.log(message1, message2)
-    }
+  scope.set("log", (message: string) => {
+    log.push(message);
   });
 
   scope.set("friends", ["Tom", "Pedro"]);
-
   scope.set("raining", false);
 
-  const program = build(programAst).eval(scope);
-  console.log(program);
+  build(programAst).eval(scope);
 
-  t.pass();
+  t.snapshot(log.join('\n'));
 });
 
 test("throws on unknown node type", (t) => {

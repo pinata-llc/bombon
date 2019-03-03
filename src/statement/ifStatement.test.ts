@@ -1,51 +1,59 @@
-import test from 'ava';
+import anyTest, {TestInterface} from 'ava';
+import sinon from 'sinon';
 
 import {Scope} from "../scope";
 import {Literal} from "../expression/literal";
-import {LogicalExpression} from "../expression/logicalExpression";
 import {IfStatement} from "./ifStatement";
 import {BlockStatement} from "./blockStatement";
-import {ExpressionStatement} from "./expressionStatement";
+import {Statement} from "./statement";
 
-const scope = new Scope();
+const test = anyTest as TestInterface<{
+  scope: Scope,
+  consequent: Statement,
+  alternate: Statement,
+  consequentFake: sinon.SinonSpy,
+  alternateFake: sinon.SinonSpy,
+}>;
 
-const trueTest = new LogicalExpression(new Literal(true), "||", new Literal(false));
-const falseTest = new LogicalExpression(new Literal(true), "&&", new Literal(false));
+test.beforeEach(({ context: ctx }) => {
+  ctx.scope = new Scope();
+  ctx.consequentFake = sinon.fake();
+  ctx.alternateFake = sinon.fake();
 
-const consequent = new BlockStatement([
-  new ExpressionStatement(new Literal("true!"))
-]);
+  ctx.consequent = new BlockStatement([
+    new (class extends Statement {
+      eval() { ctx.consequentFake() }
+    })()
+  ]);
 
-const alternate = new BlockStatement([
-  new ExpressionStatement(new Literal("false!"))
-]);
+  ctx.alternate = new (class extends Statement {
+    eval() { ctx.alternateFake() }
+  })();
+});
+
+const trueTest = new Literal(true);
+const falseTest = new Literal(false);
 
 test("true test", (t) => {
-  const ifS = new IfStatement(trueTest, consequent);
-  t.deepEqual(ifS.eval(scope), ["true!"]);
+  new IfStatement(trueTest, t.context.consequent).eval(t.context.scope);
+  t.true(t.context.consequentFake.calledOnce);
+  t.false(t.context.alternateFake.called);
 });
 
 test("false test", (t) => {
-  const ifS = new IfStatement(falseTest, consequent);
-  t.falsy(ifS.eval(scope));
+  new IfStatement(falseTest, t.context.consequent).eval(t.context.scope);
+  t.false(t.context.alternateFake.called);
+  t.false(t.context.consequentFake.called);
 });
 
 test("true test with alternate", (t) => {
-  const ifS = new IfStatement(
-    trueTest,
-    consequent,
-    alternate
-  );
-
-  t.deepEqual(ifS.eval(scope), ["true!"]);
+  new IfStatement(trueTest, t.context.consequent, t.context.alternate).eval(t.context.scope);
+  t.true(t.context.consequentFake.calledOnce);
+  t.false(t.context.alternateFake.called);
 });
 
 test("false test with alternate", (t) => {
-  const ifS = new IfStatement(
-    falseTest,
-    consequent,
-    alternate
-  );
-
-  t.deepEqual(ifS.eval(scope), ["false!"]);
+  new IfStatement(falseTest, t.context.consequent, t.context.alternate).eval(t.context.scope);
+  t.true(t.context.alternateFake.calledOnce);
+  t.false(t.context.consequentFake.called);
 });

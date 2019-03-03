@@ -4,16 +4,16 @@ import {Expression} from "../expression/expression";
 import {Scope} from "../scope";
 
 @ASTNode
-export class ExpressionStatement extends Statement {
+export class ReturnStatement extends Statement {
 
   constructor(
-    @ASTParam("expression")
-    protected expression: Expression<any>
+    @ASTParam("argument")
+    protected argument: Expression<any> | null
   ) {
     super();
   }
 
   eval(scope: Scope) {
-    this.expression.eval(scope);
+    scope.break("function", this.argument ? this.argument.eval(scope) : undefined);
   }
 }

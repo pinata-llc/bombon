@@ -19,6 +19,12 @@ export class MemberExpression extends Expression<any> {
   eval(scope: Scope): any {
     const obj: any = this.object.eval(scope);
     const name = this.property instanceof Identifier ? this.property.name : this.property.eval(scope);
-    return obj[name];
+    let value = obj[name];
+
+    if (typeof value === "function") {
+      value = value.bind(obj);
+    }
+
+    return value;
   }
 }

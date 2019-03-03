@@ -12,12 +12,9 @@ export class BlockStatement extends Statement {
   }
 
   eval(scope: Scope) {
-    const results = [];
-
     for (const statement of this.body) {
-      results.push(statement.eval(scope));
+      statement.eval(scope);
+      if (scope.broken) break;
     }
-
-    return results;
   }
 }

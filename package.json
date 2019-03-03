@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
+    "update-snapshots": "ava --update-snapshots",
     "test": "npm run build && ava",
     "coverage": "npm run build && nyc ava"
   },

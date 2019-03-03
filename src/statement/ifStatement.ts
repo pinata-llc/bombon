@@ -1,13 +1,13 @@
 import {ASTNode, ASTParam} from "../ast";
-import {Statement} from "./statement";
-import {LogicalExpression} from "../expression/logicalExpression";
+import {Expression} from "../expression/expression";
 import {Scope} from "../scope";
+import {Statement} from "./statement";
 
 @ASTNode
 export class IfStatement extends Statement {
   constructor(
     @ASTParam("test")
-    protected test: LogicalExpression,
+    protected test: Expression<boolean>,
 
     @ASTParam("consequent")
     protected consequent: Statement,
@@ -20,9 +20,9 @@ export class IfStatement extends Statement {
 
   eval(scope: Scope) {
     if (this.test.eval(scope)) {
-      return this.consequent.eval(scope.child());
+      this.consequent.eval(scope.child("if"));
     } else if (this.alternate) {
-      return this.alternate.eval(scope.child());
+      this.alternate.eval(scope.child("if"));
     }
   }
 }

@@ -1,18 +1,60 @@
 import test from 'ava';
 
 import {Scope} from "../scope";
-import {Literal} from "../expression/literal";
-import {LogicalExpression} from "../expression/logicalExpression";
 import {BlockStatement} from "./blockStatement";
-import {ExpressionStatement} from "./expressionStatement";
+import {Statement} from "./statement";
+import sinon from 'sinon';
 
-const scope = new Scope();
+const scope = new Scope("function");
 
 test("evaluates all statements", (t) => {
-  const bs = new BlockStatement([
-    new ExpressionStatement(new Literal("Hi!")),
-    new ExpressionStatement(new LogicalExpression(new Literal(true), "||", new Literal(false)))
-  ]);
+  const fake = sinon.fake();
+  const fake2 = sinon.fake();
 
-  t.deepEqual(bs.eval(scope), ["Hi!", true]);
+  class MyStatement extends Statement {
+    eval() {
+      fake();
+    }
+  }
+
+  class MyStatement2 extends Statement {
+    eval() {
+      fake2();
+    }
+  }
+
+  new BlockStatement([
+    new MyStatement(),
+    new MyStatement2(),
+  ]).eval(scope);
+
+  t.true(fake.calledOnce);
+  t.true(fake2.calledOnce);
+  t.true(fake2.calledAfter(fake));
+});
+
+test("early block end", (t) => {
+  const fake = sinon.fake();
+  const fake2 = sinon.fake();
+
+  class MyStatement extends Statement {
+    eval(scope: Scope) {
+      fake();
+      scope.break("function", null);
+    }
+  }
+
+  class MyStatement2 extends Statement {
+    eval() {
+      fake2();
+    }
+  }
+
+  new BlockStatement([
+    new MyStatement(),
+    new MyStatement2(),
+  ]).eval(scope);
+
+  t.true(fake.calledOnce);
+  t.false(fake2.called);
 });

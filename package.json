@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Run JS subsets in JS, safely",
   "main": "lib/index.js",
-  "files": ["lib/**/*"],
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
@@ -15,7 +17,11 @@
   },
   "author": "Agustin Zubiaga <agustin@gopinata.com>",
   "license": "MIT",
-  "keywords": ["javascript", "DSL", "language"],
+  "keywords": [
+    "javascript",
+    "DSL",
+    "language"
+  ],
   "dependencies": {
     "reflect-metadata": "^0.1.13"
   },

@@ -2,13 +2,14 @@ import "reflect-metadata";
 import { UnknownNodeType } from "./error/unknownNodeType";
 
 type NodeClass = any;
-
-const nodeTypes: {
+interface INodeTypes {
   [type: string]: NodeClass;
-} = {};
+}
+
+const allNodeTypes: INodeTypes = {};
 
 export function ASTNode(target: NodeClass) {
-  nodeTypes[target.name] = target;
+  allNodeTypes[target.name] = target;
 }
 
 const NODE_PARAMS_KEY = "bombon:AST:node:params";
@@ -21,7 +22,7 @@ export function ASTParam(param: string) {
   };
 }
 
-export function build(entry: any) {
+export function build(entry: any, nodeTypes: INodeTypes = allNodeTypes) {
   // TODO: Avoid recursion?
 
   if (entry === null) {
@@ -46,10 +47,10 @@ export function build(entry: any) {
       param = [];
 
       for (const statement of statements) {
-        param.push(build(statement));
+        param.push(build(statement, nodeTypes));
       }
     } else if (typeof param === "object") {
-      param = build(param);
+      param = build(param, nodeTypes);
     }
 
     params.push(param);

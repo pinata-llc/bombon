@@ -1,0 +1,13 @@
+import "./expression/arrowFunctionExpression";
+import "./expression/binaryExpression";
+import "./expression/callExpression";
+import "./expression/identifier";
+import "./expression/literal";
+import "./expression/logicalExpression";
+import "./expression/memberExpression";
+import "./expression/unaryExpression";
+import "./program";
+import "./statement/blockStatement";
+import "./statement/expressionStatement";
+import "./statement/ifStatement";
+import "./statement/returnStatement";

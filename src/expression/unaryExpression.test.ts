@@ -30,7 +30,10 @@ test(macro, "+", -10, -10);
 
 // Unknown operator
 test("throws error when passing an unknown operator", t => {
-  t.throws(() => {
-    new UnaryExpression(">>%" as any, new Literal(2)).eval(scope);
-  }, UnknownUnaryOperator);
+  t.throws(
+    () => {
+      new UnaryExpression(">>%" as any, new Literal(2)).eval(scope);
+    },
+    { instanceOf: UnknownUnaryOperator },
+  );
 });

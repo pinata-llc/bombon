@@ -93,7 +93,10 @@ test(macro, 7, "%", 2, 1);
 
 // Unknown operator
 test("throws error when passing an unknown operator", t => {
-  t.throws(() => {
-    new BinaryExpression(new Literal(1), ">>%" as any, new Literal(2)).eval(scope);
-  }, UnknownBinaryOperator);
+  t.throws(
+    () => {
+      new BinaryExpression(new Literal(1), ">>%" as any, new Literal(2)).eval(scope);
+    },
+    { instanceOf: UnknownBinaryOperator },
+  );
 });

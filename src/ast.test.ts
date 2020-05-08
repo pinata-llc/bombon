@@ -85,9 +85,12 @@ test("build", t => {
 });
 
 test("throws on unknown node type", t => {
-  t.throws(() => {
-    build({
-      type: "BullS#1tStatement",
-    });
-  }, UnknownNodeType);
+  t.throws(
+    () => {
+      build({
+        type: "BullS#1tStatement",
+      });
+    },
+    { instanceOf: UnknownNodeType },
+  );
 });

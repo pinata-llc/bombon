@@ -22,7 +22,8 @@
     "language"
   ],
   "dependencies": {
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "zargon": "^0.2.3"
   },
   "devDependencies": {
     "@types/acorn": "^4.0.5",

@@ -21,18 +21,18 @@ test.beforeEach(({ context: ctx }) => {
   ctx.alternateFake = sinon.fake();
 
   ctx.consequent = new BlockStatement([
-    new class extends Statement {
+    new (class extends Statement {
       public eval() {
         ctx.consequentFake();
       }
-    }(),
+    })(),
   ]);
 
-  ctx.alternate = new class extends Statement {
+  ctx.alternate = new (class extends Statement {
     public eval() {
       ctx.alternateFake();
     }
-  }();
+  })();
 });
 
 const trueTest = new Literal(true);

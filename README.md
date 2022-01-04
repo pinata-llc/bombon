@@ -1,2 +1,3 @@
 # bombon
-JS in JS
+
+Experimental JavaScript interpreter in JavaScript
